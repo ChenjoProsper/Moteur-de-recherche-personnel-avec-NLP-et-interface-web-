@@ -1,22 +1,43 @@
 from utils import *
+import shutil # Pour nettoyer le dossier d'index Whoosh
 
-# --- Fonction d'Indexation ---
-def creer_index_inverse(cleaned_files_directory="data/nettoyes"):
+# Importations Whoosh
+from whoosh.index import create_in
+from whoosh.fields import Schema, TEXT, ID
+from whoosh.qparser import QueryParser
+
+
+# --- Fonctions d'Indexation et de Recherche avec Whoosh ---
+
+# Définition du schéma de l'index
+# 'path' : le chemin unique du fichier (non analysé)
+# 'content' : le contenu du fichier (texte analysé pour la recherche)
+schema = Schema(filepath=ID(stored=True), content=TEXT(stored=True))
+
+def creer_index_whoosh(cleaned_files_directory="data/nettoyes", index_dir="data/index_whoosh"):
     """
-    Crée un index inversé à partir des fichiers texte nettoyés.
-    L'index stocke pour chaque mot, les noms des fichiers où il apparaît.
+    Crée ou met à jour un index Whoosh à partir des fichiers texte nettoyés.
     """
-    index_inverse = {} # Dictionnaire: {mot: [liste_de_fichiers_ou_le_mot_apparait]}
+    print(f"Début de la création/mise à jour de l'index Whoosh dans : {index_dir}\n")
+
+    # Supprime l'index précédent pour s'assurer qu'il est propre (utile en développement)
+    if os.path.exists(index_dir):
+        shutil.rmtree(index_dir)
+        print(f"Dossier d'index existant '{index_dir}' supprimé.")
     
-    print(f"Début de l'indexation des fichiers dans : {cleaned_files_directory}\n")
+    os.makedirs(index_dir) # Crée le dossier pour le nouvel index
 
-    if not os.path.exists(cleaned_files_directory):
-        print(f"Erreur : Le dossier des fichiers nettoyés '{cleaned_files_directory}' n'existe pas.")
-        print("Assurez-vous d'avoir exécuté les étapes d'extraction et de nettoyage auparavant.")
-        return None
+    # Crée un nouvel index Whoosh avec le schéma défini
+    ix = create_in(index_dir, schema)
+    writer = ix.writer() # Obtient un writer pour ajouter des documents à l'index
 
     files_indexed_count = 0
-    # Parcourir tous les fichiers dans le dossier des fichiers nettoyés
+    if not os.path.exists(cleaned_files_directory):
+        print(f"Erreur : Le dossier des fichiers nettoyés '{cleaned_files_directory}' n'existe pas.")
+        print("Veuillez d'abord exécuter les étapes d'extraction et de nettoyage.")
+        return None
+
+    # Parcourt les fichiers nettoyés et les ajoute à l'index
     for filename in os.listdir(cleaned_files_directory):
         if filename.lower().endswith(".txt"):
             file_path = os.path.join(cleaned_files_directory, filename)
@@ -25,109 +46,97 @@ def creer_index_inverse(cleaned_files_directory="data/nettoyes"):
                 with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
                 
-                # Tokenisation simple: diviser le texte en mots
-                # Convertir en minuscules pour une recherche insensible à la casse
-                words = re.findall(r'\b\w+\b', content.lower()) 
+                # Ajoute le document à l'index
+                # 'filepath' sera le nom du fichier (identifiant unique)
+                # 'content' sera le texte du fichier
+                writer.add_document(filepath=filename, content=content)
                 
-                # Ajouter les mots à l'index inversé
-                for word in set(words): # Utilise un set pour ne pas ajouter le même fichier plusieurs fois pour le même mot
-                    if word not in index_inverse:
-                        index_inverse[word] = []
-                    index_inverse[word].append(filename)
-                
-                print(f"Fichier '{filename}' indexé.")
+                print(f"Fichier '{filename}' ajouté à l'index.")
                 files_indexed_count += 1
 
             except Exception as e:
-                print(f"Erreur lors de l'indexation du fichier '{filename}' : {e}")
+                print(f"Erreur lors de l'ajout du fichier '{filename}' à l'index : {e}")
 
+    writer.commit() # Valide toutes les modifications à l'index
+    
     if files_indexed_count == 0:
         print(f"Aucun fichier .txt à indexer trouvé dans '{cleaned_files_directory}'.")
         return None
     else:
-        print(f"\nIndexation terminée. {files_indexed_count} fichiers indexés.")
-        print(f"Taille de l'index (nombre de mots uniques) : {len(index_inverse)}")
-        return index_inverse
+        print(f"\nIndexation Whoosh terminée. {files_indexed_count} documents indexés.")
+        return ix # Retourne l'objet Index pour la recherche
 
-# --- Fonction de Recherche (pour tester l'index) ---
-def rechercher_dans_index(index_inverse, requete):
+def rechercher_avec_whoosh(index, requete, top_n=5):
     """
-    Recherche une requête dans l'index inversé et retourne les fichiers pertinents.
+    Recherche une requête dans l'index Whoosh et retourne les fichiers pertinents.
     """
-    if not index_inverse:
-        print("L'index n'a pas été créé ou est vide.")
+    if index is None:
+        print("L'index Whoosh n'a pas été créé ou est vide.")
         return []
 
-    # Nettoyer la requête de recherche de la même manière que le texte a été nettoyé
-    requete_nettoyee = nettoyer_texte(requete).lower()
-    mots_requete = re.findall(r'\b\w+\b', requete_nettoyee)
-
-    if not mots_requete:
-        print("Veuillez entrer des mots valides pour la recherche.")
-        return []
-
-    # Initialiser l'ensemble des résultats avec les documents du premier mot
-    # Si le mot n'est pas dans l'index, les résultats sont vides.
-    resultats = set(index_inverse.get(mots_requete[0], [])) 
-
-    # Pour les recherches multi-mots (ET logique)
-    for i in range(1, len(mots_requete)):
-        word = mots_requete[i]
-        if word in index_inverse:
-            resultats = resultats.intersection(set(index_inverse[word])) # Intersection pour trouver les docs qui contiennent TOUS les mots
-        else:
-            # Si un mot de la requête n'est pas dans l'index, aucun document ne peut contenir tous les mots.
-            return [] 
+    print(f"\n--- Recherche pour '{requete}' ---")
+    results_list = []
     
-    # Retourner la liste des noms de fichiers triés (optionnel)
-    return sorted(list(resultats))
+    # Ouvre un moteur de recherche sur l'index
+    with index.searcher() as searcher:
+        # Crée un parser de requête pour le champ 'content' (où se trouve le texte)
+        # Whoosh gère automatiquement la tokenisation, le stemming, les stop words ici
+        query_parser = QueryParser("content", index.schema)
+        
+        try:
+            # Parse la requête de l'utilisateur
+            query = query_parser.parse(requete)
+            
+            # Exécute la recherche
+            results = searcher.search(query, limit=top_n)
+            
+            print(f"Trouvé {len(results)} résultat(s) (top {top_n} affichés) :")
+            for hit in results:
+                # 'hit.score' est le score de pertinence
+                # 'hit['filepath']' accède au champ 'filepath' du document indexé
+                results_list.append((hit['filepath'], hit.score))
+                print(f"- {hit['filepath']} (Score: {hit.score:.2f})")
+            
+            if not results_list:
+                print("Aucun résultat trouvé.")
 
-# --- Exemple d'utilisation dans le script principal ---
+        except Exception as e:
+            print(f"Erreur lors de la recherche Whoosh : {e}")
+            print("Astuce : Assurez-vous que votre requête est valide (ex: 'mot' ou 'mot AND autre_mot').")
+
+    return results_list
+
+
+# --- Exécution du workflow complet ---
 if __name__ == "__main__":
-    # Assure-toi que les dossiers existent et contiennent des fichiers nettoyés pour le test
     data_dir = "data"
     extracted_dir = os.path.join(data_dir, "extraits")
     cleaned_dir = os.path.join(data_dir, "nettoyes")
+    whoosh_index_dir = os.path.join(data_dir, "index_whoosh")
 
-    # Crée des fichiers nettoyés factices si non existants
-    os.makedirs(cleaned_dir, exist_ok=True)
-    sample_cleaned_files = {
-        "doc1.txt": "Le chat noir dort sur le canapé.",
-        "doc2.txt": "Le chien et le chat jouent dans le jardin.",
-        "doc3.txt": "Les animaux domestiques incluent les chats et les chiens.",
-        "doc4.txt": "Un oiseau vole dans le ciel bleu."
-    }
-    for filename, content in sample_cleaned_files.items():
-        file_path = os.path.join(cleaned_dir, filename)
-        if not os.path.exists(file_path):
-            with open(file_path, "w", encoding="utf-8") as f:
-                f.write(content)
-            print(f"Fichier nettoyé factice '{filename}' créé pour le test.")
 
-    # Étape d'Indexation
-    mon_index = creer_index_inverse(cleaned_files_directory=cleaned_dir)
+    # --- PROCESSUS DE RECHERCHE DE DOCUMENTS ---
 
-    # Étape de Recherche (si l'index a été créé)
-    if mon_index:
-        print("\n--- TEST DE RECHERCHE ---")
-        requete1 = "chat noir"
-        resultats1 = rechercher_dans_index(mon_index, requete1)
-        print(f"Recherche pour '{requete1}' : {resultats1}") # Attendu: ['doc1.txt']
+    # 1. Extraction des PDF bruts
+    print("\n--- ÉTAPE 1 : EXTRACTION DES PDF BRUTS ---")
+    process_pdfs_in_directory(data_dir)
 
-        requete2 = "chat chien"
-        resultats2 = rechercher_dans_index(mon_index, requete2)
-        print(f"Recherche pour '{requete2}' : {resultats2}") # Attendu: ['doc2.txt', 'doc3.txt']
+    # 2. Nettoyage des fichiers extraits
+    print("\n--- ÉTAPE 2 : NETTOYAGE DES FICHIERS EXTRAITS ---")
+    nettoyer_fichiers_extraits(input_directory=extracted_dir, output_directory=cleaned_dir)
 
-        requete3 = "oiseau"
-        resultats3 = rechercher_dans_index(mon_index, requete3)
-        print(f"Recherche pour '{requete3}' : {resultats3}") # Attendu: ['doc4.txt']
+    # 3. Indexation avec Whoosh
+    print("\n--- ÉTAPE 3 : INDEXATION AVEC WHOOSH ---")
+    whoosh_index = creer_index_whoosh(cleaned_files_directory=cleaned_dir, index_dir=whoosh_index_dir)
 
-        requete4 = "python"
-        resultats4 = rechercher_dans_index(mon_index, requete4)
-        print(f"Recherche pour '{requete4}' : {resultats4}") # Attendu: [] (car pas dans les fichiers d'exemple)
+    # 4. Recherche dans l'index Whoosh
+    if whoosh_index:
+    #     print("\n--- ÉTAPE 4 : RECHERCHE DANS L'INDEX WHOOSH ---")
+    #     rechercher_avec_whoosh(whoosh_index, "abstraite")
+    #     rechercher_avec_whoosh(whoosh_index, "Modélisation ") # Teste le stemming (garantie vs garantir)
+    #     rechercher_avec_whoosh(whoosh_index, "séries temporelle") # Teste les stop words (l' et les apostrophes)
+        rechercher_avec_whoosh(whoosh_index, "Valéry MONTHE Base")
+    # else:
+    #     print("\nImpossible d'effectuer des recherches car l'index Whoosh n'a pas été créé.")
 
-        requete5 = "nombre temps"
-        resultats5 = rechercher_dans_index(mon_index, requete5)
-        print(f"Recherche pour '{requete5}' : {resultats5}") # Attendu: ['doc1.txt', 'doc2.txt', 'doc3.txt', 'doc4.txt']
-    else:
-        print("\nIndexation échouée, impossible de lancer la recherche.")
+    # print("\nProcessus de recherche de documents terminé.")

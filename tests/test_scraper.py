@@ -1,5 +1,5 @@
 import pytest
-from src.scraper import scrape_and_save
+from indexation import scrape_and_save
 import os
 
 def test_scraper():
