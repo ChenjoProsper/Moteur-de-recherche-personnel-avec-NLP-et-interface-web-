@@ -1,0 +1,786 @@
+INF322
+2023-2024
+Avril 2024
+INF322 : Base de données
+Dépendances fonctionnelles et 
+Normalisation
+Université de 
+Yaoundé I
+Valéry MONTHE
+valery.monthe@facsciences-uy1.cm
+Bureau R114, Bloc pédagogique 1               
+2
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Contenu du Chapitre
+16/04/2024
+1. Rappels modélisation
+2. Contraintes d’intégrité
+3. Dépendances fonctionnelles (DF)
+4. Validation d’un MCD
+5. Normalisation de modèle
+1. Conceptuel
+2. Logique (relationnel)
+3
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Rappels modélisation
+16/04/2024
+4
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Modéliser c’est construire des modèles
+§ Un modèle c’est une représentation abstraite d’une réalité perçue.
+§ Modèle de données = langage
++ sémantique de représentation et
+manipulation de données
+§ Selon le niveau d’abstraction, on peut utiliser différents langages et
+formalisme de représentation
+1. Modélisation conceptuelle : (concepteur, client)
+§
+Structuration haut-niveau de l’information, entité et liens entre elles
+§
+Modèle entité-association, UML, MERISE, etc.
+2. Modélisation logique : (concepteur et développeur)
+§
+Représentation logique des données
+§
+Modèle hiérarchique, réseau, relationnel, objet
+3. Modélisation physique : (développeur et Administrateur de BD)
+§
+Organisation physique des données et implémentation des opérations
+§
+SQL, Modèles de stockage sur disque, indexes, etc..
+Modèles de données 
+16/04/2024
+5
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Formalisme retenu par l’ISO pour décrire l’aspect conceptuel des
+données à l’aide d’entités et d’associations
+§ En
+français
+EA
+(Entité-Association)
+et
+en
+Anglais
+ER(Entity
+Relationship)
+§ Objectif :
+§ Décider des données devant être stockées, de leur propriétés et des relations
+entre elles
+§ Définir leur caractéristiques : types, taille, format, etc.
+§ Définir les contraintes à respecter
+§ Démarche :
+§ Discuter avec les experts métiers et le futurs utilisateurs
+§ Identifier les objets (métiers) du monde réel et les liens entre eux
+§ Identifier les opérations sur ces objets et les éventuelles évolutions
+Modèle E/A : Objectif et démarche
+16/04/2024
+6
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Entité :
+§ Représentation d’un objet matériel (concret) ou immatériel (abstrait) du
+monde réel (du domaine modélisé ou étudié)
+§ Exemple :
+§ Entité concrète : l’étudiant «Simon PAUL, 20 ans, Masculin, 676 59 87 52»
+§ Entité abstraite : l’ inscription «INFL-L2, 2021»
+§ Entité type ou classe d’entité :
+§ représentation commune que l’on adopte pour modéliser les objets (entités)
+de même nature (qui possède les mêmes caractéristiques).
+§ Exemple : Etudiant, Inscription
+§ Une entité est une occurrence (un élément particulier) d’une entité type.
+§ « Simon PAUL» est une occurrence de Etudiant
+§ « INF-L2, 2021» est une occurrence de Inscription
+Concepts de base 
+16/04/2024
+7
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Propriété (ou attribut) :
+§ C’est une caractéristique associée à une entité type.
+§ Possède un nom et un domaine de valeur (ensemble de valeurs permises)
+§ Est atomique (ne peut être multivalué)
+§ Un attribut prend une seule valeur à la fois pour chaque entité
+§ Exemple :
+§ Le nom, le prénom, l'adresse et le matricule sont des attributs de Étudiant
+§ Le nom est une chaîne de 1 à 20 caractères et l'attribut correspondant est Nom.
+§ Le matricule est un nombre entier avec 4 chiffres
+§ L'attribut prénom ne peut pas contenir plusieurs chaînes de caractères (e.g
+"Jean", "Louis") mais une seule chaîne de caractères (e.g "Jean, Louis« )
+§ Le nom de l'étudiant de matricule 1234 (=une entité) ne peut pas être à la fois
+« Simon PAUL » et « Nicolas NK »
+Concepts de base
+16/04/2024
+8
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Identifiant
+§ c’est un sous ensemble d’attributs d’une entité type
+§ Permet de distinguer les entités d’une même entité type
+§ Deux entités de même type (de la même classe) ne peuvent pas avoir le
+même identifiant. (Deux étudiants ne peuvent pas avoir le même matricule)
+§ Chaque entité type doit avoir au moins un identifiant, il est toujours souligné
+§ Exemple d’identifiant :
+§ Le matricule peut être l’identifiant de l’entité type ETUDIANT, car il permet de
+distinguer chaque étudiant de façon unique.
+§ Représentation d’une entité type
+Concepts de base
+16/04/2024
+Etudiant
+Matricule
+Nom
+dateNais
+9
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Association
+§ Elle modélise les liens(relations) entre les entités
+§ Une association d’entités est un regroupement d’entités traduisant une
+certaine réalité.
+§ Comme pour les entités, on regroupe les associations de même nature en
+classes d’associations.
+§ Exemple : Entre les entités types ETUDIANT et ENSEIGNEMENT (UE) on peut
+considérer la classe d'association INSCRIT/SUIVRE pour traduire le fait qu'un étudiant
+est inscrit à un enseignement.
+Concepts de base
+16/04/2024
+10
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Attribut d’une association
+§ Une association peut posséder un attribut comme pour ceux des entités type
+§ Un attribut d'une classe d'association est une propriété qui dépend de
+toutes les entités intervenant dans l'association.
+§ Comme pour les entités, on regroupe les associations de même nature en
+classes d’associations.
+§ Exemple : la classe d'association INSCRIT définie entre les classes d'entités
+ETUDIANT et ENSEIGNEMENT a pour attribut l'année de première inscription
+de l'étudiant à cet enseignement. Cette année d'inscription est attribut de
+l'association et non de l'une des entités car il faut connaître l'étudiant et
+l'enseignement pour la déterminer.
+Concepts de base
+16/04/2024
+11
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Cardinalité
+§ Elle traduit la participation des occurrences (entité) d’une entité type dans
+une association.
+§ Elle s’exprime par deux valeurs : cardinalité minimale (m) et cardinalité
+maximale(M)
+§ Elle représente le nombre de fois minimal et maximal qu’une occurrence
+d’une entité type associée peut intervenir dans l’association.
+§ Le minimum peut être :
+ü0 si une occurrence de l’entité peut exister sans intervenir dans aucune occurrence de
+l’association : on parle de participation optionnelle
+ü1 ou n>1 : si une occurrence de l’entité ne peut exister que si elle intervient dans au
+moins 1 ou n occurrences de l’association : on parle de participation obligatoire
+§ Le maximum peut être :
+ü1 si une occurrence de l’entité ne peut pas être impliqué dans plus d’une occurrence
+de l’association : on parle d’unicité de participation
+ün>1 : si une occurrence de l’entité peut être impliqué dans plusieurs occurrences de
+l’association : on parle de multiplicité de participation
+Concepts de base
+16/04/2024
+12
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Cardinalité : Exemple
+§ Ici, un étudiant n’est pas obliger de s’inscrire/suivre à un enseignement, mais
+s’il le souhaite, il peut s’inscrire à plusieurs enseignement.
+§ Par contre, un enseignement doit avoir au moins 1 étudiant qui le suit.
+Concepts de base
+16/04/2024
+13
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Un type d’association permet de distinguer les associations en
+fonction du nombre minimal et maximal des entités qu’elles
+mettent en jeu.
+§ Le type se base sur la cardinalité maximale
+On distingue :
+§ Association de type 1 : 1 (ou un-à-un)
+§ La cardinalité maximale est à 1 de part et d’autre de l’association
+§ Association de type 1 : n (ou un-à-plusieurs)
+§ La cardinalité maximale est à 1 d’un côté et à n de l’autre
+§ Association de type n : m (ou plusieurs-à-plusieurs)
+§ La cardinalité maximale est à n de part et d’autre de l’association
+Type d’association
+16/04/2024
+14
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ C’est le nombre d’entité ou de pattes (segment qui relie une entité à
+l’association) composant cette association.
+§ On parle d’association : binaire, ternaire ou n-aire (3n>)
+§ Exemple : association ternaire ou de dimension 3
+§ NB : une association peut être réflexive
+Dimension d’une association
+16/04/2024
+15
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Objectif : Il récence toutes les données manipulées dans le
+système étudié
+§ Démarche
+üA la suite d’interviews des différents poste de travail du SI
+existant, on rassemble des exemplaires de tous les documents
+manipulés, ainsi que la description des fichiers existants.
+üA
+partir
+de
+ce
+document,
+on
+établit
+la
+liste
+des
+données(propriétés)
+manipulées
+pour
+chaque
+objet
+de
+gestion(entité type).
+üPour chaque élément on donne son nom utilisable dans le
+système, sa désignation, son type, sa longueur, sa nature, règle
+de calcul ou d’intégrité.
+üLa liste est représentée sous forme de tableau appelée
+dictionnaire de données
+Dictionnaire de données
+16/04/2024
+16
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Type : Alphabétique, Numérique, Alphanumérique
+§ Nature : Elémentaire, Concatenée, Calculée
+§ Signifié = objet à qualifier,
+§ signifiant = mot employé pour représenter le signifié
+§ Erreurs à éviter dans l’élaboration de DD
+üSynonymes : 2 signifiants pour un même signifié
+üPolysèmes : 1 signifiant pour deux signifié
+Dictionnaire de données(DD)
+16/04/2024
+17
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Dictionnaire de données – exemple 
+16/04/2024
+Nom
+Signification
+Type Longueur Nature Règle de calcul ou intégrité
+NumBon N° bon de commande
+N
+4
+E
+dateCde Date comd
+N
+6
+E
+Format jjmmaa
+codCli
+Code client
+AN
+6
+E
+A créer
+Ref
+Réf Produit
+AN
+5
+E
+1 lettre + 3chiffres
+Qte
+Quantité cmdée
+N
+3
+E
+Entier >0
+Montant Montant ligne
+N
+8
+CA
+PUxQte
+Total
+Total commande
+N
+8
+CA
+Somme des montants
+18
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Contraintes d’intégrité
+16/04/2024
+19
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§
+Elle définie des propriétés qui doivent être vérifiées par les données de la BD.
+§
+Elle sont en générale exprimées par des règles de gestion
+§
+Le type se base sur la cardinalité maximale
+§
+Exemple : Pour la BD de gestion d’une école on peut avoir les règles de gestion
+suivantes :
+§ R1 : tout professeur enseigne en principe au moins une matière, mais certains d’entre
+eux peuvent être dispensés d’enseignement en raison de leurs travaux de recherche.
+§ R2 : toute matière est enseignée dans au moins une classe.
+§ R3 : toute classe a au moins 3 enseignants et matières.
+Contraintes d’intégrité
+16/04/2024
+20
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§
+Contrainte d’identifiant : Les valeurs prises pas l’identifiant sont uniques et
+toujours définies.
+§
+Contraintes
+de cardinalité : les cardinalités portées par les entités membres
+d’une association imposent des nombres minimal et maximal d’occurrence dans
+l’association.
+Exemple : une compétition ne peut exister que si la station où elle se
+déroule existe ; et une station peut exister de manière indépendante de
+toutes compétition.
+§
+Contraintes statiques : elles peuvent porter sur une propriété ou diverses
+propriétés d’une même entité ou relation.
+Exemple : la date de la commande doit toujours être inférieure à celle de
+la livraison. Date_cmde < date_liv.
+Contraintes d’intégrité
+16/04/2024
+21
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Exercice  d’application: A chercher
+16/04/2024
+•
+But : conception d'une BD destinée à conserver des descriptions d'articles
+parus dans des journaux.
+• Un éditeur édite des journaux. Il est caractérisé par un
+nom et une adresse. Un journal est édité par un éditeur
+et publie des articles dans ses numéros. On conservera le
+nom du journal et le nom de son rédacteur en chef. Un
+numéro de journal contient une collection d'articles.
+Chaque article paru dans un numéro est signé par un
+auteur. On désire conserver le titre et un résumé de
+l'article ainsi que le nom de son auteur. Les auteurs sont
+connus par leur nom, leur prénom, leur adresse et leur
+date de naissance.
+•
+Proposez une modélisation conceptuelle de cette BD à l’aide du modèle EA
+22
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Dépendances Fonctionnelles
+16/04/2024
+23
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+DF entre propriétés d’une entité type
+§
+Une propriété (ou groupe de propriétés) Y dépend fonctionnellement d’une
+autre propriété (ou groupe de propriétés) X si étant donné une valeur de X, il lui
+correspond une valeur unique de Y.
+§
+C’est-à-dire : à chaque valeur de X on a une unique valeur de Y correspondante
+§
+On note X
+Y et on lit Y dépend de X ou X détermine Y.
+§
+Exemple :
+ü matricule_étudiant
+nom_etudiant ;
+ü Si on connaît le matricule de l’étudiant on doit pouvoir trouver son nom, car la
+connaissance du matricule détermine une et une seule valeur du nom. La réciproque
+n’est pas vraie.
+§
+La DF est une relation transitive : si X
+Y et Y
+Z alors X
+Z
+§
+La DF peut porter sur une concaténation de propriétés.
+Exemple : N° Bon de Commande + Ref produit
+Qté commandée
+Dépendances fonctionnelles (DF)
+16/04/2024
+24
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+DF Elémentaire
+§ On dit qu’il y a dépendance fonctionnelle élémentaire entre X et Y, si
+aucune partie de X ne suffit pour détermine Y.
+§ code_client+nom_client
+Adresse_client, n’est pas élémentaire
+car, la connaissance de code_client (partie de code_client+nom_client)
+suffit à déterminer Adresse_client.
+§ N°_Bon_de_Commande+Ref_produit
+Qté_commandée,
+est
+élémentaire
+car,
+il
+faut
+absolument
+connaitre
+le
+numéro
+d’une
+commande et la référence d’un produit donnée pour avoir la quantité
+commandé.
+Dépendances fonctionnelles (DF)
+16/04/2024
+25
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+DF Elémentaire directe
+§ On dit que B dépend fonctionnellement de A par une DF
+élémentaire directe, si cette dépendance est élémentaire et s’il
+n’existe pas de propriété C telle que A
+C
+B.
+§ C'est-à-dire pas de transitivité.
+§ Exemple :
+ü N° Professeur
+Code_matiere (directe)
+ü Code_Matiere
+Nom_Matiere (directe)
+ü N° Professeur
+Nom_matiere (pas direct)
+ü Matricule_Etudiant
+Code_Region (directe)
+ü Matricule_Etudiant
+Nom_Region (pas direct)
+Dépendances fonctionnelles (DF)
+16/04/2024
+26
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Remarques
+§
+Toutes les autres propriétés d’une entité type dépendent de l’identifiant.
+§
+Une propriété d’une association de type n:m dépend fonctionnellement des
+identifiants des entités type liées .
+§
+Dans l’entité produit on a la DF Réf
+Désignation
+§
+Par l’association CONCERNE on la DF N°_Commande + Ref
+Quantité
+Dépendances fonctionnelles (DF)
+16/04/2024
+27
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Dépendance fonctionnelle entre entités
+§
+On dit qu’il existe une DF entre deux entités A et B, on note A
+B si toute
+occurrence de A détermine une et une seule occurrence B.
+§
+On parle de Contrainte d’intégrité fonctionnelle (CIF).
+§
+Exemple :
+Dans le modèle de la page(diapo) précédente, on a la DF,
+COMMANDE
+CLIENT
+Les cardinalités (1,1) de COMMANDE dans l’association « passer » expriment que
+tout bon de commande détermine un et un seul client.
+§
+Remarque : Dans une relation binaire, de type un à plusieurs, on a toujours une
+CIF, dont l’entité porteuse de la cardinalité maximale 1 est l’émettrice.
+§
+Exemple : voiture et personne
+Dépendances fonctionnelles (DF)
+16/04/2024
+28
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Graphe de dépendances fonctionnelles
+§
+En représentant tous les attributs et toutes les dépendances fonctionnelles
+directes entre eux, on obtient un réseau appelé graphe de couverture minimal
+ou graphe de dépendances fonctionnelles.
+§
+Exemple
+Elaboration d’un MCD à partir des DF
+16/04/2024
+29
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Elaboration d ’un schéma E/A par étude des DF
+Cela peut se faire en suivant les étapes suivantes:
+§ Repérer et souligner les identifiants
+§ Recenser
+tous
+les
+attributs
+non
+identifiant
+qui
+dépendent
+directement d’un identifiant et d’un seul, et former une entité type
+avec cet identifiant.
+§ Les dépendances élémentaires entre les identifiants forment des
+associations binaires dont les cardinalités maximales sont 1 au
+départ de la dépendance fonctionnelle et n à l’arrivée.
+§ Les
+attributs
+(non
+identifiant)qui
+dépendent
+de
+plusieurs
+identifiants sont les attributs d’une association supplémentaire
+dont les cardinalités maximales sont toutes n.
+Elaboration d’un MCD à partir des DF
+16/04/2024
+30
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Elaboration d ’un schéma E/A par étude des DF
+Elaboration d’un MCD à partir des DF
+16/04/2024
+31
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ But : Vérifier que tous les résultats attendus par les
+utilisateurs(éditions, affichage écran, etc.) peuvent être
+construits à partir du MCD.
+§ Principe : on associe un modèle de données (E/A) à chaque
+résultat. On parle de modèle externe (ME).
+§ Le ME décrit la structure de données nécessaire à l’élaboration
+d’un résultat.
+§ Il est élaboré à partir du résultat attendu et du dictionnaire de
+données sans s’aider du MCD.
+§ On confronte ensuite le MCD d’origine (Brut) à ce modèle externe
+§ On complète/modifie le MCD si nécessaire, on obtient le MCD
+validé (futur)
+Validation de Modèle conceptuel
+16/04/2024
+32
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Elles doivent être respectées pour la cohérence du modèle EA :
+§
+chaque entité possède un identifiant ;
+§
+chaque propriété (attribut) d'une occurrence d'une entité ne possède, au plus,
+qu'une valeur ;
+§
+toutes les propriétés doivent être élémentaires ;
+§
+toutes les propriétés autres que l'identifiant doivent dépendre pleinement et
+directement de l'identifiant ;
+§
+à chaque occurrence d'une association correspond une et une seule occurrence
+de chaque entité participant à l'association ;
+§
+pour une occurrence d'une association, il ne doit exister au plus qu'une valeur
+pour chaque propriété (attribut) de cette association ;
+§
+chaque propriété d'une association doit dépendre pleinement et directement de
+tout identifiant (clé) et non pas d'une partie seulement de l'identifiant ;
+§
+une cardinalité (0,1) ou (1,1) indique une CIF et réciproquement.
+Règles de validation
+16/04/2024
+33
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+§ Généralisation : C’est l’opération qui consiste à regrouper
+dans une même entité type plus générale (dites entité
+générique) les propriétés communes présentes dans des
+entités différentes mais semblables.
+§ Spécialiser: C’est l’opération qui consiste à prendre en compte
+les caractéristiques particulières de certaines entités (dites
+entités spécifiques).
+§ On définit ainsi une hiérarchie entre les entités types
+Extension : Généralisation et Spécialisation
+16/04/2024
+34
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Extension : Généralisation et Spécialisation
+16/04/2024
+Spécialisation
+Généralisation
+35
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Normalisation de modèles
+16/04/2024
+36
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+qLes entités type d’un modèle de données doivent vérifier un
+certain nombre de règle de normalisation parmi lesquelles:
+§ la 1ere forme normale,
+§ la 2e forme normale,
+§ la 3e forme normale
+§ la forme normale de BOYCE-CODD.
+qLes normalisations ont pour but d’éliminer les redondances, et
+d’éliminer les anomalies de mise à jour.
+§ Par exemple si on supprime un client, on aimerait bien conserver la
+catégorie à laquelle il appartient
+Normalisation d’un modèles conceptuel
+16/04/2024
+37
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Une entité type est en première forme normale, si:
+§ Il ya un identifiant pour distinguer chaque occurrence de l’entité
+§ Toutes les propriétés sont élémentaires, c’est-à-dire ne sont pas
+à valeur multiple.
+Exemple
+Cette entité n’est pas en 1FN, car :
+§ on n’a pas d’identifiant, plusieurs clients pouvant avoir le même nom ;
+§ l’adresse n’est pas élémentaire, elle est sans doute composée de Rue, ville
+Première forme normale (1FN)
+16/04/2024
+Client
+Nom_cli
+adresse
+38
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Une entité type est en deuxième forme normale, si:
+§ Elle est en première forme normale
+§ Toute propriété n’appartenant pas à l’identifiant ne dépend pas seulement d’une
+partie de son identifiant mais de tout l’identifiant (toutes les DF doivent être
+élémentaires)
+Exemple
+L’identifiant est Num_cmde + Ref, mais la DF : Num_cmde + Ref
+désignation n’est
+pas élémentaire car, Ref
+désignation .
+§ Donc cette entité n’est pas en 2FN. Sa normalisation donne :
+Deuxième forme normale (2FN)
+16/04/2024
+Commande
+Num_cmde
+Ref
+Designation
+qté
+39
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Une entité est en troisième forme normale, si:
+§ Elle est en deuxième forme normale
+§ Toute
+propriété
+dépend
+de
+l’identifiant
+par
+une
+dépendance
+fonctionnelle élémentaire directe. (pas de transitivité dans la DF ie
+toute propriété n’appartenant pas à l’identifiant ne dépend pas d’un
+attribut non identifiant).
+Exemple
+ü Cette entité n’est pas en 3FN, car la DF code_client
+nom_Cat n’est pas directe.
+ü Du fait de la transitivité Code_client
+Code_Cat
+Nom_Cat
+ü Pour corriger on peut créer 2 entités :
+CLIENT (code_client , nom_client) « appartient à » CATEGORIE(code_cat, nom_cat).
+Troisième forme normale (3FN)
+16/04/2024
+Client
+Code_client
+Nom_client
+Code_Cat
+Nom_Cat
+40
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+qLes relations d’un modèle relationnel doivent vérifier un
+certain nombre de règle de normalisation parmi lesquelles:
+§ la 1ere forme normale,
+§ la 2e forme normale,
+§ la 3e forme normale
+Normalisation d’un modèle relationnel
+16/04/2024
+41
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Il est défini en donnant le nom de la relation suivi de la liste de ses
+attributs, avec pour chacun son domaine de valeur.
+§ R (A1 : D1, A2 : D2 , A3 : D3 , …. , An : Dn)
+Les Ai sont les attributs et les Di les domaines
+§ Exemple : Le schéma de la relation r est :
+R = (NOM : D1, ADR : D2, NUM : D3)
+On peut écrire en abrégé : R = (NOM,ADR,NUM), sans les
+domaines.
+Schéma d’un relation : Rappel
+16/04/2024
+42
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Une relation est en première forme normale, si:
+§ Il y a une clé primaire pour distinguer chaque tuple de la
+relation
+§ Tous les attributs sont élémentaires, c’est-à-dire ne sont pas à
+valeur multiple.
+Exemple
+§ Etudiant (nom, datNais, genre, ville, email)
+§ Cette relation n’est pas en première forme normale, car il y manque
+une clé primaire
+Première forme normale (1FN)
+16/04/2024
+43
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Une Relation est en deuxième forme normale, si:
+§ Elle est en première forme normale
+§ Toute attribut n’appartenant pas à la clé ne dépend pas seulement d’une partie de la
+clé mais de toute la clé(toutes les DF doivent être élémentaires)
+Exemple
+§ Commande(num_cmde, ref, date_cmde, designation, qte_cmde)
+Cette entité n’est pas en 2FN.
+Commande(num_cmde, date_cmde)
+Produit (ref, designation)
+Commande_Produit(num_cmde, ref, qte_cmde)
+Deuxième forme normale (2FN)
+16/04/2024
+44
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Une relation est en troisième forme normale, si:
+§ Elle est en deuxième forme normale
+§ Tous les attributs dépendent de la clé par une dépendance
+fonctionnelle élémentaire directe. (pas de transitivité dans la DF ie
+tout attribut n’appartenant pas à la clé ne dépend pas d’un attribut
+non clé).
+Exemple
+Client (code_client, nom_client, code_cat, nom_cat)
+ü Cette entité n’est pas en 3FN
+ü Version corrigée
+CLIENT (code_client , nom_client, #code_cat)
+CATEGORIE(code_cat, nom_cat).
+Troisième forme normale (3FN)
+16/04/2024
+45
+L3 - INF322 || 2023-2024
+Dépendances Fonctionnelles et Normalisation
+Ouvrages recommandés
+• G. Gardarin, Bases de Données-Objet et Relationnelle,Eyrolles. 2001
+• C.J. Date. Introduction aux Bases de Données. Vuibert Informatique. 
+2000
+• J. Akoka, I. Comyn-Wattiau. Conception des Bases de Données 
+Relationnelles en Pratique : Concepts, Méthodes et Cas Corrigés. 
+Vuibert Informatique. 2001
+Notes de cours et autres références
+• Thierry Lecroq, Base de données, Université de Rouen.
+Bibliographie et ressources
+16/04/2024

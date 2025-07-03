@@ -1,0 +1,252 @@
+INF312 : Analyse statistique
+Chapitre 2 - Indices descriptifs d’une série temporelle
+NZEKON NZEKO’O Armel Jacques, PhD
+Université de Yaoundé I
+armel.nzekon@facsciences-uy1.cm
+Année académique 2023-2024
+2/24
+Objectifs du chapitre
+A la fin de ce chapitre, chaque étudiant doit être capable de :
+▶Dire à quoi servent les indices de description d’une série
+temporelle
+▶Lister les principales catégories et donner leur particularité
+▶Estimer et interpréter les indices de la tendance centrale
+▶Estimer et interpréter les indices de dispersion
+▶Estimer et interpréter les indices de dépendance
+▶Utiliser l’auto-corrélation
+3/24
+Plan du chapitre
+1. Pourquoi les indices de description ?
+2. Indices des séries statistiques uni-variées
+Indices de la tendance centrale
+Indices de dispersion
+3. Indices de dépendance
+Auto-covariances empiriques
+Auto-corrélations empiriques
+Visualisation graphique des auto-corrélations
+4. Utilité de l’auto-corrélation
+5. Devoirs de maison
+4/24
+Pourquoi les indices de
+description ?
+5/24
+1. Pourquoi les indices de description ?
+D’une série temporelle à une série statistique
+La suite d’observation (Xt)t=1..n d’une série temporelle peut être
+assimilée à une série statistique d’une variable quantitative
+(discrète ou continue)
+▶On peut donc calculer les effectifs, fréquences, effectifs
+cumulés, fréquences cumulées ... et construire les diagrammes
+ou graphiques associés
+▶On peut également calculer des indices numériques classiques
+qui permettent de résumer les série statistiques
+Mesure de tendance centrale - résumer la série par un nombre
+Mesure de dispersion - la dispersion des éléments autour d’une
+mesure de la tendance centrale
+Cependant, certaines mesures classiques appliquées aux séries
+statistiques ne sont pas pertinentes pour les séries temporelles
+c’est le cas des mesures de position
+6/24
+1. Pourquoi les indices de description ?
+Décrire la relation entre des observations qui se succèdent
+L’une des particularités de la description des séries temporelles par
+rapport au séries statistiques est celle qui concerne la relation entre
+des observations qui se suivent dans la série temporelle
+▶Ce qui permet de traiter une série temporelle (Xt)t=1..n
+comme une série statistique bi-variée
+(Y , Z) = {(y1, z1); (y2, z2); ...; (ym, zm)}
+▶Pour deux couples (yi, zi) et (yj, zj), si yi correspond xt et zi à
+xt+k alors yj correspond à xt+j−i et zj à xt+j−i+k
+▶Autrement dit, (Y , Z) est une série statistique bi-variée
+(xt, xt+k)t=1..(n−k)
+Tout ceci permet d’estimer les mesures de dépendance et de
+corrélation entre les observations d’une série temporelle
+7/24
+Indices des séries statistiques
+uni-variées
+8/24
+2. Indices des séries statistiques uni-variées
+Indices de la tendance centrale
+Les mesures de la tendance centrale permettent de représenter une
+série statistique par un seul nombre
+C’est essentiellement la moyenne et la médiane
+▶La moyenne arithmétique - somme des valeurs divisée par le
+nombre de valeurs ¯x = 1
+n
+Pn
+i=1 xi
+▶La médiane - est la valeur qui partage une série de données
+ordonnées en deux parties égales.
+Pour l’estimer on applique les étapes suivantes :
+Ordonner les données
+Déterminer le nombre total de données n
+si n est impair, la médiane est la valeur de la donnée centrale
+si n est pair, la médiane est la moyenne des deux données
+centrales
+Dans ce cours c’est la moyenne arithmétique qu’on utilise
+9/24
+2. Indices des séries statistiques uni-variées
+Indices de dispersion
+Les mesures de dispersion permettent de mesurer la dispersion des
+données d’une série statistique autour de la moyenne ou d’autres mesures
+de la tendance centrale
+▶L’étendue la différence entre la plus grande et la plus petite valeur
+afin de donner une estimation de la dispersion des valeurs autour de
+la moyenne ; E = x(n) −x(1)
+▶La variance noté σ2, est la moyenne des carrés des écarts entre
+chaque modalité de la série et la moyenne ; σ2 = 1
+n
+Pn
+i=1(xi −¯x)2
+▶L’écart type noté σ, est un écart «typique» de tous les écarts entre
+les données et la moyenne ; σ =
+√
+σ2
+▶La distance inter-quantile
+est la différence entre le troisième et le
+premier quartile
+Dans ce cours c’est la
+variance empirique
+qui est utilisée
+10/24
+Indices de dépendance
+11/24
+3. Indices de dépendance
+Auto-covariances empiriques
+L’auto-covariance empirique noté ˆσn est une notion spécifique à
+l’étude des séries temporelles, et qui renseigne sur la dépendance entre
+les observations xt de la série temporelle (Xt)t=1...n
+▶L’auto-covariance d’ordre 0 correspond à la variance empirique
+ˆσn(0) = 1
+n
+Pn
+t=1(xt −¯x)2
+▶A l’ordre 1, l’auto-covariance renseigne sur la dépendance entre
+deux observations successives (xt, xt+1)
+ˆσn(1) =
+1
+n −1
+Pn−1
+t=1 (xt −¯x)(xt+1 −¯x)
+▶L’auto-covariance d’ordre 2 renseigne sur la dépendance entre deux
+observations écartées de deux unités de temps
+ˆσn(2) =
+1
+n −2
+Pn−2
+t=1 (xt −¯x)(xt+2 −¯x)
+▶Pour des raisons de bon sens statistique, on considère
+l’auto-covariance empirique jusqu’à un ordre h pas très grand
+comparé à la longueur n de la série temporelle
+12/24
+3. Indices de dépendance
+Auto-corrélations empiriques
+L’auto-corrélation empirique d’ordre k, noté ˆρn(k) est le quotient de
+l’auto-covariance empirique d’ordre k par la variance empirique ;
+ˆρn(k) = ˆσn(k)
+ˆσn(0)
+▶La remarque évidente ˆρn(0) = 1
+▶En passant des auto-covariances aux auto-corrélations, l’information
+sur la dispersion des données autour de la moyenne est perdu
+▶Et il ne reste que la relation de dépendance entre les observations
+▶Par exemple, ˆρn(1) =
+Pn−1
+t=1 (xt −¯x)(xt+1 −¯x)
+Pn
+t=1(xt −¯x)2
+est presque le
+coefficient de corrélation entre la série statistique (x1, x2, ..., xn−1)
+et la série décalée d’une unité de temps (x2, x3, ..., xn)
+Dans ce cours ce sont les auto-corrélations empiriques qui sont utilisées
+pour caractériser les dépendances entre les observations
+13/24
+3. Indices de dépendance
+Visualisation graphique des auto-corrélations
+En considérant la remarque précédente sur ˆρn(1), on peut
+construire le nuage de points associé N1 = {(xt, xt+1)}t=1...(n−1)
+▶Ce nuage de points constitue une bonne illustration de ˆρn(1)
+▶Si ˆρn(1) ≈±1, alors le nuage est allongé selon une droite ; la
+pente de la droite a le signe de ˆρn(1)
+▶Si ˆρn(1) ≈0, alors le nuage est arrondi
+▶On peut faire les commentaires analogues pour les nuages de
+points Nk = {(xt, xt+k)}t=1...(n−k)
+Les graphiques qui suivent représentent chacun : une série
+temporelle simulée, les nuages de points N1, N2, ..., N8 de cette
+série et enfin le diagramme en bâton des auto-corrélations
+14/24
+3. Indices de dépendance
+Visualisation graphique des auto-corrélations
+Série 01, Nuages de points N1, N2, ..., N8 et courbe des auto-corrélations
+15/24
+3. Indices de dépendance
+Visualisation graphique des auto-corrélations
+Série 02, Nuages de points N1, N2, ..., N8 et courbe des auto-corrélations
+16/24
+Utilité de l’auto-corrélation
+17/24
+4. Utilité de l’auto-corrélation
+Application sur la série résiduelle
+L’auto-corrélation est surtout utilisée sur les séries résiduelles qui
+s’ajoutent aux tendances et aux saisonnalités
+▶La démarche habituelle consiste à retirer de la série la
+tendance et la saisonnalité
+(ce pré-traitement des données est l’objet d’un autre chapitre)
+▶Puis on calcule les auto-corrélations empiriques sur la série
+résiduelle afin de construire un modèle prédictif sur ces résidus
+18/24
+4. Utilité de l’auto-corrélation
+Allure des auto-corrélations
+Il est utile de comprendre quelle est l’allure des auto-corrélations d’une
+série temporelle brute (comportant tendance ou/et saisonnalité)
+▶Pour une longue série présentant une tendance polynômiale,
+l’auto-corrélation ˆρn(k) est positive et assez proche de 1 lorsque k
+croît tout en restant petit devant n (allure constante)
+▶Pour une série présentant une périodicité, cette périodicité se voit
+bien sur l’auto-corrélation (allure d’oscillation)
+▶Si l’auto-corrélation du résidu présente une des propriétés ci-dessus,
+c’est sans doute parce que l’on a oublié d’enlever une tendance ou
+une saisonnalité
+19/24
+Devoirs de maison et travaux
+pratiques
+20/24
+5. Devoirs de maison
+Démonstrations à faire
+Série à tendance linéaire pure
+▶On considère la série temporelle à tendance linéaire pure
+xt = at + b, avec t = 1...n
+▶Démontrer que pour k fixé, ˆρn(k) →1 quand n →∞
+▶Pour ce faire, donner d’abord l’expression de la moyenne
+▶Montrer ensuite que ˆρn(k) ne dépend ni de a, ni de b
+▶Enfin, utiliser les résultats connus sur les sommes de
+puissances d’entiers successifs
+Série périodique pure
+▶On considère la série temporelle périodique pure
+xt = a · cos(2tπ
+T ), avec t = 1...n
+▶Démontrer que pour k fixé, ˆρn(k) →cos(2kπ
+T ) quand n →∞
+21/24
+5. Devoirs de maison
+Travaux pratiques
+Pour chacun des 05 jeux de données à votre disposition
+▶Calculer la moyenne, la variance et l’écart-type
+▶Représenter la série temporelle
+▶Représenter les nuages de points N1, N2, ..., N8
+▶Représenter la courbe des auto-corrélations ˆρn(k) avec
+k = 1...50 (50 valeurs de k)
+▶A partir de l’allure de la courbe des auto-corrélations, déduire
+si la série temporelle a une tendance et/ou une saisonnalité
+22/24
+Références
+23/24
+Références
+▶M.-C. Viano, A. Philippe, Cours de Séries Temporelles,
+Université des Sciences et Technologies de Lille, 1999-2004
+▶Jean-Yves Dauxois, Introduction à l’Étude des Séries
+Temporelles, INSA Toulouse, 2016-2017
+▶Sylvain Rubenthaler, Séries chronologiques, Université Côte
+d’AZUR, 2021-2022
+24/24
+Merci de votre attention
+Question ? !

@@ -1,0 +1,293 @@
+INF312 : Analyse statistique
+Chapitre 3 - Lissages Exponentiels
+NZEKON NZEKO’O Armel Jacques, PhD
+Université de Yaoundé I
+armel.nzekon@facsciences-uy1.cm
+Année académique 2023-2024
+2/34
+Objectifs du chapitre
+A la fin de ce chapitre, chaque étudiant doit être capable de :
+▶Définir et dire à quoi servent les lissages exponentiels
+▶Paramétrer, appliquer et interpréter un lissage exponentiel simple
+▶Paramétrer, appliquer et interpréter un lissage exponentiel double
+▶Paramétrer, appliquer et interpréter les méthodes de Holt-Winters
+3/34
+Plan du chapitre
+1. Qu’est-ce qu’un lissage exponentiel ?
+Pourquoi le lissage exponentiel ?
+Idée générale sur le lissage exponentiel
+2. Lissage exponentiel simple
+Formules récursives de mise à jour
+Interprétation géométrique
+Choix de la constante de lissage
+3. Lisage exponentiel double
+Calcul des coefficients
+Formules récursives de mise à jour
+4. Méthode de Holt-Winters
+Méthode non-saisonnière
+Méthode saisonnière additive
+Méthode saisonnière multiplicative
+5. Devoirs de maison
+4/34
+Qu’est-ce qu’un lissage
+exponentiel ?
+5/34
+1. Qu’est-ce qu’un lissage exponentiel ?
+Pourquoi le lissage exponentiel ?
+▶Dans l’industrie il est courant que l’on doive effectuer des prévisions
+de vente de production ou de stock pour une centaine de produits
+▶Ces prévisions sont effectuées à partir de données par exemple
+mensuelles et l’horizon de prévision est court, un an maximum
+▶Un certain nombre de techniques auto-projectives sont regroupées
+sous la rubrique du lissage exponentiel
+▶Ces approches construisent des prévisions assez précises, sont peu
+coûteuses et les calculs peuvent être rendus très rapides par
+l’utilisation de formules récursives de mise à jour
+▶Elles ont beaucoup de succès lorsqu’un grand nombre de séries
+temporelles doivent être analysées séparément pour des prévisions
+Dans ce cours, nous présentons les bases empiriques de ces techniques et
+précisons leurs conditions d’utilisation optimales
+6/34
+1. Qu’est-ce qu’un lissage exponentiel ?
+Idée générale sur le lissage exponentiel
+On dispose d’une série temporelle x = (x1, x2, ..., xn)
+On se situe à la date n et on souhaite prévoir la valeur xn+h
+non encore observée à l’horizon h
+On note cette prévision ˆxn,h
+▶L’entier n est appelé base de la prévision
+▶Dans les techniques de lissage exponentiel, il s’agit d’ajuster
+localement à la série temporelle, une fonction simple :
+Une constance dans le lissage exponentiel simple
+Une droite dans le lissage exponentiel double
+Une fonction polynomiale ou périodique
+dans les lissages plus généraux
+7/34
+Lissage exponentiel simple
+8/34
+2. Lissage exponentiel simple
+▶La prévision ˆxn,h est construite en prenant en compte toute
+l’histoire de la chronique
+▶Plus on s’éloigne de la base n de la prévision, moins l’influence
+des observations correspondantes est importante
+▶Cette décroissance de l’influence est de type exponentiel
+(d’où le nom de la technique)
+▶On se donne α, appelé constante de lissage, avec 0 < α < 1
+ˆxn,h = (1 −α)
+n−1
+X
+i=0
+αixn−i
+(1)
+▶La prévision ˆxn,h ne dépend pas de h
+▶Plus α est voisin de 1, plus l’influence des observations
+éloignées dans le temps de la base n est grande
+9/34
+2. Lissage exponentiel simple
+Formules récursives de mise à jour
+La définition précédente vérifie les formules de récurrences
+suivantes ˆxn,h
+ˆxn,h = (1 −α)xn + αˆxn−1,h
+(2)
+ˆxn,h = ˆxn−1,h + (1 −α)(xn −ˆxn−1,h)
+(3)
+▶Par conséquent ˆxn−1,h et xn suffisent pour calculer ˆxn,h
+▶L’utilisation des formules récursives nécessite d’initialiser la
+récurrence en prenant par exemple ˆx1,h = x1
+▶Lorsque n est très grand, la valeur initial x1 a peu d’influence
+10/34
+2. Lissage exponentiel simple
+Interprétation géométrique
+Asymptotiquement ˆxn,h est la meilleure approximation au sens des
+moindres carrés (pour des pondérations exponentielles) de x par le
+vecteur constant aσ où σ = (1, 1, ..., 1) ∈Rn
+▶En effet, la valeur de a qui minimise Pn−1
+i=0 αi(xn−i −a)2 est
+fournie par :
+ˆa(n) = 1 −α
+1 −αn
+n−1
+X
+i=0
+αixn−i
+(4)
+▶Pour obtenir ˆa(n), l’influence des observations décroît
+exponentiellement lorsqu’on s’éloigne de la base (n)
+▶On peut dire que l’ajustement par la constante a est local et
+se fait au voisinage de n
+▶La taille réelle de la plage des observations influentes dépend
+de α ; Plus α est grand plus la taille est grande
+11/34
+2. Lissage exponentiel simple
+Choix de la constante de lissage
+En pratique le lissage exponentiel simple est assez peu utilisé car la
+méthode n’est pas bonne en présence de tendance, de composante
+saisonnière ou de fluctuations de hautes fréquences
+▶Les valeurs de α ∈[0.7, 1[ produisent des prévisions qui
+tiennent compte du passé lointain
+▶Lorsque α ∈]0, 0.3], la prévision est souple c’est à dire
+influencée par les observations récentes
+12/34
+2. Lissage exponentiel simple
+Choix de la constante de lissage
+On peut déterminer un α adapté à la prévision d’une série donnée
+▶Pour un horizon h on cherche la valeur de α qui minimise
+Pn−h
+t=1(xt+h −ˆxt,h)2
+▶C’est la valeur qui en moyenne réalise la meilleure prévision à
+l’horizon h sur les bases 1, 2, ..., (n −h) en utilisant le critère
+des moindres carrés
+▶On choisit une grille de valeurs de α pour lesquelles on calcule
+le critère et on retient la valeur qui le minimise
+▶Exemple de grille : {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9}
+Cette technique de choix de constante peut être reprise dans les
+méthodes qui vont suivre
+13/34
+2. Lissage exponentiel simple
+Lissage et prévision par la méthode de lissage exponentiel simple d’un
+bruit blanc [gauche] et d’une tendance linéaire [droite], α ∈{0.1, 0.5, 0.9}
+14/34
+Lissage exponentiel double
+15/34
+3. Lissage exponentiel double
+On ajuste au voisinage de n une droite d’équation yt = a1 + a2(t −n)
+Le prédicteur c’est ˆxn,h = ˆa1 + ˆa2h
+Les coefficients ˆa1 et ˆa2 sont solution de l’équation
+16/34
+3. Lissage exponentiel double
+Calcul des coefficients
+On annule les dérivées partielles par rapport à a1 et a2
+de l’équation précédente et on vérifie à l’aide des dérivées secondes
+que l’on a bien un minimum
+17/34
+3. Lissage exponentiel double
+Calcul des coefficients
+En admettant que :
+Les deux précédentes équations deviennent :
+Introduisons deux lissages exponentiels simples successifs
+celui de x produit L1, celui de L1 produit L2
+18/34
+3. Lissage exponentiel double
+Calcul des coefficients
+L1 et L2 sont liés à a1 et a2 par les relations :
+Les solutions recherchées vérifient donc :
+Et aussi :
+19/34
+3. Lissage exponentiel double
+Formules récursives de mise à jour
+Pour le prédicteur ˆxn,h = ˆa1(n) + ˆa2(n)h
+Les formules récursives de mise à jour sont les suivantes :
+En considérant l’instant (n −1) comme base et en fixant l’horizon h = 1
+On obtient les équations suivantes :
+On peut prendre comme valeurs initiales ˆa1(0) = x1 et ˆa2(0) = x2 −x1
+20/34
+3. Lissage exponentiel double
+Lissage et prévision par la méthode de lissage exponentiel double d’un
+bruit blanc [gauche] et d’une tendance linéaire [droite], α ∈{0.1, 0.5, 0.9}
+21/34
+Méthode de Holt-Winters
+22/34
+4. Méthode de Holt-Winters
+Méthode non-saisonnière
+La méthode de Holt-Winters (non saisonnière) est une généralisation
+du lissage exponentiel simple mais avec un point de vue différent de celui
+introduit dans le lissage exponentiel double
+▶Tout comme pour le lissage exponentiel double, l’ajustement se fait
+de façon linéaire au voisinage de n
+▶La nuance se faisant au niveau des formules de mise à jour
+▶La prévision conserve la forme : ˆxn,h = ˆa1(n) + ˆa2(n)h
+▶Cette méthode est plus souple que le lissage exponentiel double, car
+elle fait intervenir deux constantes β et γ au lieu d’une seule α
+▶Si β = 1 −α2 et γ = 1−α
+1+α, les formules de mise à jour de
+Holt-Winters et du lissage exponentiel double sont identiques
+▶Et donc, si β et γ sont petits alors α est grand et donc les
+prévisions tiennent compte d’un passé lointain
+23/34
+4. Méthode de Holt-Winters
+Méthode saisonnière additive
+Méthode de Holt-Winters saisonnière additive : on ajuste au
+voisinage de n une droite d’équation xt = a1 + a2(t −n) + st
+où st est une composante périodique de période T
+▶Les formules récursives de mise à jour sont
+▶La prévision prend la forme
+Et ainsi de suite pour h > 2T
+24/34
+4. Méthode de Holt-Winters
+Méthode saisonnière multiplicative
+Méthode de Holt-Winters saisonnière multiplicative : on ajuste au
+voisinage de n une droite d’équation xt = [a1 + a2(t −n)] × st
+où st est une composante périodique de période T
+▶Les formules récursives de mise à jour sont
+▶La prévision prend la forme
+25/34
+4. Méthode de Holt-Winters
+Lissage et prévision par la méthode de Holt-Winters
+26/34
+4. Méthode de Holt-Winters
+Lissage et prévision par la méthode de Holt-Winters sur les données de
+vente de champagne
+27/34
+Devoirs de maison
+28/34
+5. Devoirs de maison
+Exercices théoriques
+Exercice 01 : Montrer que dans le cas du lissage exponentiel simple,
+ˆx(n, h) est la meilleure approximation au sens des moindres carrés de x
+par le vecteur aσ où σ = (1, 1, ..., 1) ∈Rn
+Exercice 02 : Dans le cas du lissage exponentielle simple, montrer que
+lorsque α est proche de 1 (respectivement de 0), les prévisions tiennent
+compte du passé lointain (respectivement des observations récentes)
+- Que dire des prévisions si α = 1 ? Que dire des prévisions si α = 0 ?
+- Déduire l’intervalle recommandé pour le choix des valeurs de α
+Exercice 03 : A partir des éléments de ce cours, montrer comment on
+obtient les formules récursives de mise à jour des coefficients
+ˆa1(n) = f [ˆa1(n −1)] et ˆa1(n) = f [ˆa1(n −1)] dans le cas du lissage
+exponentiel double
+Exercice 04 : Démontrer que les formules de mise à jour de la méthode
+de Holt-Winters non-saisonnière et du lissage exponentiel double sont
+identiques si et seulement si β = 1 −α2 et γ = 1−α
+1+α ; (On ne demande
+pas de vérifier, mais de démontrer)
+29/34
+5. Devoirs de maison
+Travaux pratiques
+Exercices pratiques : Considérons les séries temporelles des pages
+ci-dessous. La grille de valeurs des paramètres α, β et γ est
+{0.1, 0.3, 0.5, 0.7, 0.9}
+Pour chaque horizon h pris dans l’ensemble H donné dans chacun des cas
+ci-dessous, déterminer :
+1- La meilleure valeur de α pour le lissage exponentiel simple
+2- La meilleure valeur de α pour le lissage exponentiel double
+3- Les meilleures valeurs de β et γ pour la méthode de Holt-Winters
+non-saisonnière
+4- Construire les représentations graphique du lissage et de la prévision
+pour chacun des cas précédents (avec les meilleurs paramétrages)
+Note pour les meilleurs paramétrages : Pour chaque h ∈H, et pour
+chaque combinaison possible de paramètre obtenue à partir de la grille,
+déterminer toutes les prévisions en déplaçant la base de t0 à n(la base
+pour la prévision). Calculé l’erreur du paramétrage considéré, puis passer
+au paramétrage suivant. Une fois tout l’espace des paramétrages est
+couvert, vous déterminer aisément le meilleur paramétrage.
+30/34
+5. Devoirs de maison
+Travaux pratiques
+Premier cas : La base de la prévision c’est Trim4 de l’année 1986
+et l’ensemble des horizons considéré H = {1, 7}
+31/34
+5. Devoirs de maison
+Travaux pratiques
+Deuxième cas : La base de la prévision c’est Apr −01 et
+l’ensemble des horizons considéré H = {1, 8}
+32/34
+Références
+33/34
+Références
+▶M.-C. Viano, A. Philippe, Cours de Séries Temporelles,
+Université des Sciences et Technologies de Lille, 1999-2004
+▶Jean-Yves Dauxois, Introduction à l’Étude des Séries
+Temporelles, INSA Toulouse, 2016-2017
+▶Sylvain Rubenthaler, Séries chronologiques, Université Côte
+d’AZUR, 2021-2022
+34/34
+Merci de votre attention
+Question ? !

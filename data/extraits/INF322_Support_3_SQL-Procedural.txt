@@ -1,0 +1,260 @@
+Valéry MONTHE
+valery.monthe@facsciences-uy1.cm
+Université de Yaoundé 1               
+INF322
+2023-2024
+Juin 2024
+INF322 : Base de données
+SQL Procédural
+(Programmation SQL)
+Université de 
+Yaoundé I
+2
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Introduction 
+§
+Oracle possède son PL/SQL pour la programmation 
+§
+MS SQL server son Transact-SQL
+§
+MySQL permet aussi de faire de la programmation 
+procédurale en SQL : 
+ü les procédures stockées
+üLes fonctions 
+üLes triggers
+3
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Plan
+§Procédures stockées
+§Fonctions
+§Trigger  
+4
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Procédures stockées
+q Petit programme stocké dans la base de
+données
+q Appelable à partir d'un client comme on
+peut le faire pour une requête.
+q Est exécutée par le serveur de base de
+données.
+5
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Procédures stockées
+q Délimiteur
+§ Il faut modifier le délimiteur par défaut de MySQL
+qui est le point virgule(;).
+§ Les plus utiliser | et //
+q Paramètres
+§Définit par son sens, nom et son type
+§3 sens :
+üIN : entrant, valeur fournie à la procédure pour ses calculs
+üOUT :
+sortant,
+valeur produite par la procédure et pourra
+ensuite être utilisée en dehors de la procédure.
+üINOUT : entrant-sortant
+6
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Procédures stockées
+q Syntaxe
+DELIMITER |
+CREATE PROCEDURE nom_proc ([param[,param…]) 
+          BEGIN 
+              instructions ; 
+          END |
+q Exécution
+DELIMITER ;
+CALL nom_proc(param);
+7
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Procédures stockées
+q Exemple 1
+DELIMITER |
+CREATE PROCEDURE effectif_etudiants_regions()
+BEGIN
+SELECT codereg, count(mat)
+FROM etudiant
+GROUP BY codereg;
+END|
+DELIMITER ;
+8
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Procédures stockées
+q Exemple 2 : paramètre entrant
+DELIMITER |
+CREATE PROCEDURE effectif_region(IN cod CHAR(2))
+BEGIN
+SELECT codereg, count(mat)
+FROM etudiant
+WHERE codereg=cod
+GROUP BY codereg;
+END |
+DELIMITER ;
+9
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Procédures stockées
+q Exemple 3 : paramètre de retour(sortant)
+DELIMITER |
+CREATE PROCEDURE effectif_regionParamOUT(OUT nb INT, IN
+cod CHAR(2))
+BEGIN
+SELECT count(mat) INTO nb
+FROM etudiant
+WHERE codereg=cod
+GROUP BY codereg;
+END |
+DELIMITER ;
+10
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Procédures stockées
+q Exemple 3 : récupérer le résultat
+SET @n=0; 
+CALL effectif_regionParamOUT(@n); 
+SELECT @n;
+11
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Procédures stockées
+q Déclaration des variables
+DECLARE myvar CHAR(10);
+DECLARE i, j INT DEFAULT 0;
+q Commentaires
+/*
+*une ligne
+*deuxieme ligne
+*/
+-- une seule ligne (il y a un espace après les 2 tirets)
+q Affectation directe de variables
+DECLARE x INT;
+DECLARE nom VARCHAR(50);
+SET x=10;
+SET nom='toto';
+12
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Procédures stockées
+q Déclaration des variables : Exemples
+13
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Fonctions
+q S’exécute aussi sur le serveur.
+q Retourne une valeur
+q Peut être utilisée directement dans une
+requête SQL.
+qSyntaxe :
+CREATE FUNCTION name (params) RETURNS TypeRetour
+Begin
+    instruction;
+end
+14
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Instructions de contrôle
+q IF THEN ELSE
+IF var = 2 THEN ... ELSE ... ELSEIF ... END IF;
+qCASE var
+CASE var 
+WHEN 1 THEN ...; 
+WHEN 2 THEN ...; 
+ELSE ...; // autres cas 
+END CASE;
+qREPEAT
+REPEAT 
+... 
+UNTIL var = 5 END REPEAT;
+qWHILE
+WHILE i < 100  DO
+ ... 
+END WHILE
+15
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+Les Curseurs (CURSOR)
+q Va
+permettre
+de
+parcourir
+un
+jeu
+d’enregistrements.
+q On déclare le curseur en l’associant à une requête
+de type SELECT qui va fournir les enregistrements.
+q Syntaxe
+16
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+TRIGGERS
+q Définition
+§ Procédure rattachée directement à un évênement sur une
+table. INSERTION, SUPPRESSION, MISE A JOUR.
+§ s’exécute à un moment : AVANT ou APRES
+q Syntaxe
+CREATE TRIGGER <nomtrigger> <action_time> <event> ON 
+<table>
+FOR EACH ROW
+BEGIN 
+  instructions;
+END;
+17
+Métriques
+Chaîne décisionnelle
+Pourquoi le BI
+Définition
+Architecture
+TRIGGERS
+q Exemple

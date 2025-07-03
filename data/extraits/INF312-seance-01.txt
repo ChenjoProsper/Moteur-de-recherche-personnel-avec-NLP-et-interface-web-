@@ -1,0 +1,187 @@
+INF312 : Analyse statistique
+Chapitre 1 - Séries temporelles : définitions et composantes
+NZEKON NZEKO’O Armel Jacques, PhD
+Université de Yaoundé I
+armel.nzekon@facsciences-uy1.cm
+Année académique 2023-2024
+2/20
+Objectifs du chapitre
+A la fin de ce chapitre, chaque étudiant doit être capable de :
+▶Dire ce qu’est une série temporelle
+▶Donner des exemples de séries temporelles
+▶Justifier l’étude des séries temporelles
+▶Décrire l’approche générale de modélisation des séries
+temporelles
+▶Donner les composantes d’une série temporelle
+▶Définir la tendance d’une série temporelle et d’identifier les
+différentes variantes
+▶Identifier les composantes saisonnières
+3/20
+Plan du chapitre
+1. Qu’est-ce qu’une série temporelle ?
+Définition
+Exemples de séries temporelles
+2. Pourquoi l’étude des séries temporelles ?
+3. Décomposition d’une série temporelle
+4. Tendances dans les séries temporelles
+5. Composantes saisonnières des séries temporelles
+4/20
+Qu’est-ce qu’une série
+temporelle ?
+5/20
+1. Qu’est-ce qu’une série temporelle ?
+Définition
+Une série temporelle ou encore série chronologique à temps
+discret est une suite d’observations d’un phénomène physique
+faites au cours du temps, en d’autre terme une suite finie
+(x1, ..., xn) de nombre réels indicées par un temps discret régulier
+▶L’indice temps peut être selon les cas la minute, l’heure, le
+jour, l’année, ...
+▶Le nombre n est appelé la longueur de la série
+▶On la représente sur un graphique avec en abscisse le temps et
+en ordonnée la valeur de l’observation à chaque instant
+▶Pour la lisibilité, les points obtenus sont reliés par des
+segments de droite
+6/20
+1. Qu’est-ce qu’une série temporelle ?
+Exemples de séries temporelles
+Le phénomène physique observé peut être considéré dans des
+domaines variés de la vie courante
+Et donc la série temporelle peut représenter l’évolution de :
+▶la consommation d’électricité, le cours du pétrole, la
+population camerounaise, le rythme cardiaque,
+▶le relevé d’un sismographe, le trafic Internet, la ventes de
+produits, les hauteurs des crues du Nil,
+▶la température des océans, la concentration en dioxyde de
+carbone de l’atmosphère,
+▶le taux de glucose dans le sang, la côte de popularité d’un
+président ...
+7/20
+1. Qu’est-ce qu’une série temporelle ?
+Exemples de séries temporelles
+On peut avoir les représentations suivantes :
+▶Les taches solaires
+Nombre annuel de taches
+observées à la surface du
+soleil pour les années 1700 à
+1980. Soit 281 points reliés
+par des segments
+▶Le trafic aérien
+Nombre de passagers (en
+milliers) dans les transports
+aériens. Une donnée par mois
+de 1949 à 1960
+8/20
+1. Qu’est-ce qu’une série temporelle ?
+Exemples de séries temporelles
+▶La vente de champagnes
+Nombre mensuel de
+bouteilles vendues entre mars
+1970 et septembre 1978. Soit
+103 points
+▶La consommation d’électricité
+Consommation sur toute la
+France. Une donnée toutes
+les 30 minutes pendant 35
+jours en juin-juillet 1991.
+Soit 1680 points
+9/20
+Pourquoi l’étude des séries
+temporelles ?
+10/20
+2. Pourquoi l’étude des séries temporelles ?
+L’étude des séries temporelles poursuit plusieurs buts pratiques :
+▶Une meilleure compréhension du phénomène
+(une bonne description de la série temporelle permet de décrire le
+phénomène observé)
+▶Une représentation simplifiée par un modèle stochastique
+Trouver et ajuster un modèle qui décrive
+ou représente au mieux les données.
+Se poseront alors nécessairement les
+questions d’estimation des paramètres et
+de test d’adéquation à un modèle choisi
+▶Une prédiction du futur du phénomène représenté
+Prévoir les valeurs futures de la série. C’est
+intéressant par exemple en Finance pour le
+cours d’un action, en santé publique pour la
+concentration d’Ozone dans l’atmosphère...
+11/20
+2. Pourquoi l’étude des séries temporelles ?
+Peut-on avoir une représentation et une prédiction parfaite du
+phénomène représenté ?
+▶Il faut garder à l’esprit que quelque soit le modèle choisi, tous
+les modèles sont faux, certains sont utiles
+▶Il y a toujours une erreur de prévision, et les bonnes méthodes
+fournissent non pas une prévision, mais un intervalle de
+prévision (intervalle de confiance)
+▶Néanmoins il faut travailler pour améliorer les modèles, car il
+arrive souvent qu’une amélioration minime de la qualité de la
+prévision ait une grosse incidence sur les gains financiers ou
+sur la satisfaction des utilisateurs finaux
+12/20
+Décomposition d’une série
+temporelle
+13/20
+3. Décomposition d’une série temporelle
+Un modèle de série temporelle est généralement composé d’une
+tendance, d’une composante saisonnière et d’un bruit ou résidu
+On a : xt = mt + st + et
+▶t est l’indice du temps, à valeur dans T ∈N
+▶mt est une fonction déterministe à variation que l’on espère lente
+(appelée tendance), qui capte les variations de niveau et que l’on
+espère assez lisse (variations à long terme)
+▶st est une fonction déterministe périodique (appelée saisonnalité) de
+période r telle que Pr
+i=1 st+i = 0, ∀t ∈T
+▶et est un bruit aléatoire stationnaire ; on l’appelle parfois résidu
+Donner la Tendance et la saisonnalité sur les graphiques ci-dessous
+14/20
+3. Décomposition d’une série temporelle
+Pour atteindre les buts de l’étude des séries temporelles, l’objectif de ce
+cours est d’apprendre à modéliser et estimer les composantes mt, st et et
+puis de pouvoir faire des prévisions sur les valeurs futures de la série
+temporelle initiale Xt
+Pour ce faire l’approche de modélisation des séries temporelles est la
+suivante :
+1. Tracer la série des données et repérer ses principales caractéristiques
+(une tendance, une saisonnalité, une ou des ruptures dans le
+comportement de la série et une ou des observations aberrantes
+2. Estimer ou enlever la tendance et la saisonnalité (mt et st) pour
+obtenir une série et de résidus stationnaires
+3. Choisir un modèle de série stationnaire pour les résidus
+4. Prévoir les valeurs futures de la série en prévoyant d’abord celles des
+résidus puis "remonter" jusqu’à la série initiale avec des
+transformations inverses
+15/20
+3. Décomposition d’une série temporelle
+Exemple de résultat de modélisation des séries temporelles
+16/20
+Tendances dans les séries
+temporelles
+17/20
+4. Tendances dans les séries temporelles
+Pour estimer la tendance mt, en général on suppose le type de
+fonction, on peut donc avoir :
+▶Une tendance linéaire mt = α0 + α1t
+▶Une tendance quadratique mt = α0 + α1t + α2t2
+▶Une tendance polynomiale mt = α0 + α1t + α2t2 + ... + αntn
+▶Une tendance exponentielle mt = α0 + α1βt
+▶Une tendance logistique mt = 1/(α0 + α1βt)
+▶Une tendance de Gompertz mt = exp(α0 + α1βt)
+▶ou un mélange de ces types de fonctions
+Puis on estime les paramètres inconnus αi et βi,
+on vérifie la qualité d’ajustement et on compare éventuellement à
+d’autres modèles
+18/20
+Composantes saisonnières des
+séries temporelles
+19/20
+5. Composantes saisonnières des séries temporelles
+▶Une série temporelle a une composante saisonnière si la série
+présente une variation cyclique prévisible
+▶Cette variation cyclique peut être estimé par une fonction ou
+une composition de fonctions trigonométriques à l’exemple de
+α1cos(Θt)
+20/20
+Merci de votre attention
+Question ? !

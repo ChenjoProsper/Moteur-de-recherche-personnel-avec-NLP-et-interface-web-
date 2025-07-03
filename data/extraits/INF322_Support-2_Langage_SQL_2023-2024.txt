@@ -1,0 +1,446 @@
+Avril 2024
+INF322 : Bases de données
+Le Langage SQL
+Université de 
+Yaoundé I
+INF322
+2023-2024
+Valéry MONTHE
+valery.monthe@facsciences-uy1.cm
+Bureau R114, Bloc pédagogique 1               
+2
+Le langage SQL
+INF322|| 2023-2024
+Contenu du Chapitre
+28/04/2024
+1. SGBD
+2. Présentation du Langage SQL
+3. Langage de définition de données (LDD)
+4. Langage de Manipulation de données (LMD)
+5. Langage de Contrôle de données (LCD)
+3
+Le langage SQL
+INF322|| 2023-2024
+§ Principaux composants
+o Système de gestion de fichiers
+o Gestionnaire de requêtes
+o Gestionnaire de transactions
+§ Principales fonctionnalités
+o Contrôle de la redondance d’information
+o Partage des données (car plusieurs utilisateurs en même temps)
+o Gestion des autorisations d’accès
+o Vérification des contraintes d’intégrité
+o Sécurité et reprise sur panne
+SGBD
+28/04/2024
+4
+Le langage SQL
+INF322|| 2023-2024
+§ Niveau interne ou physique
+o Plus bas niveau
+o Indique comment (avec quelles structures de données) sont stockées
+physiquement les données
+§ Niveau logique ou conceptuel
+o Décrit par un schéma conceptuel ou logique
+o Indique quelles sont les données stockées et quelles sont leurs
+relations, indépendamment de l’implantation physique
+§ Niveau externe ou vue
+o Propre à chaque utilisateur
+o Décrit par un ou plusieurs schémas externes
+Abstraction des données (3 niveaux)
+28/04/2024
+5
+Le langage SQL
+INF322|| 2023-2024
+Structured Query Language (normalisé en 1986)
+§ SQL2/SQL92 : standard adopté en 1992
+§ SQL3/SQL99
+:
+extension de
+SQL2
+avec
+«
+gestion
+»
+d’objets,
+déclencheurs, etc.
+§ …
+§ SQL2003: auto-incrémentation des clés, colonne calculée, prise
+en compte de XML, …
+§ SQL2008: correction de certains défauts et manques (fonctions,
+types, curseurs…)
+Le langage SQL
+28/04/2024
+6
+Le langage SQL
+INF322|| 2023-2024
+SQL
+§ Langage de Définition de Données (DDL ou LDD) : définir le
+schéma de la base de données
+§ Langage de Manipulation de Données (DML ou LMD) :
+interroger et modifier les données de la base
+§ Langage de Contrôle d’accès aux Données(DCL ou LCD) : définir
+les privilèges d’accès des utilisateurs
+§ Langage de Contrôle de Transaction (TCL ou LCT) : gérer les
+transactions
+Le langage SQL
+28/04/2024
+7
+Le langage SQL
+INF322|| 2023-2024
+Langage de définition de données
+28/04/2024
+8
+Le langage SQL
+INF322|| 2023-2024
+Types SQL
+28/04/2024
+9
+Le langage SQL
+INF322|| 2023-2024
+§ La commande CREATE
+§ La commande ALTER TABLE
+§ La commande DROP
+Langage de définition de données
+28/04/2024
+10
+Le langage SQL
+INF322|| 2023-2024
+§ Création de la base de données
+CREATE DATABASE nomDB;
+Exemple
+CREATE DATABASE Bibliotheque;
+La commande CREATE
+28/04/2024
+11
+Le langage SQL
+INF322|| 2023-2024
+§ Création de table
+CREATE TABLE nomTable (col1 type1, col2 type2, …, coln typen);
+Exemple
+La commande CREATE
+28/04/2024
+Créer la table Stock1(Piece, Fournisseur, NbP)
+Créer la table Stage
+12
+Le langage SQL
+INF322|| 2023-2024
+§ Création de d’ Index
+• Améliorer les temps de réponse des requêtes
+• Est automatiquement créé avec la contrainte PRIMARY Key
+CREATE INDEX nom_index ON nom_table (nom_colonne);
+DROP INDEX nom_index
+La commande CREATE
+28/04/2024
+13
+Le langage SQL
+INF322|| 2023-2024
+§ Modification d’une table
+ALTER : Modification de schéma
+28/04/2024
+14
+Le langage SQL
+INF322|| 2023-2024
+§ Modification d’une table
+•
+Renommer une table
+ALTER TABLE nom_table RENAME TO nouveau_nom;
+•
+Ajout ou modification de colonne
+ALTER TABLE nom_table {ADD/MODIFY} ([nom_colonne type [contrainte], ...]) ;
+•
+Renommer une colonne
+ALTER TABLE nom_table RENAME COLUMN ancien_nom TO nouveau_nom ;
+•
+Supprimer une colonne
+ALTER TABLE nom_table DROP COLUMN nom_colonne ;
+•
+Ajout d’une contrainte de table
+ALTER TABLE nom_table ADD [CONSTRAINT nom_contrainte ]contrainte ;
+•
+Supprimer des contraintes
+ALTER TABLE nom_table DROP CONSTRAINT nomContrainte ;
+ALTER : Modification de schéma
+28/04/2024
+15
+Le langage SQL
+INF322|| 2023-2024
+§ Modification d’une table : Exemple
+§
+ALTER TABLE STAGIAIRE
+ADD NomEntr VARCHAR2(20);
+§
+ALTER TABLE STAGIAIRE
+MODIFY NomEntr VARCHAR2(30);
+§
+ALTER TABLE STAGIAIRE
+DROP NomEntr;
+ALTER : Modification de schéma
+28/04/2024
+16
+Le langage SQL
+INF322|| 2023-2024
+§ Supprimer une Base de données
+§
+DROP DATABASE nomDB
+§
+Exemple : DROP DATABASE bibliotheque;
+§ Supprimer une table
+§
+DROP TABLE nomTable
+§
+Exemple : DROP TABLE STAGIAIRE;
+DROP: Suppression de schéma
+28/04/2024
+17
+Le langage SQL
+INF322|| 2023-2024
+§ Clé primaire
+§ PRIMARY KEY
+§ Valeur nulle interdite
+§ NOT NULL
+§ Unicité de valeur
+§ UNIQUE
+§ Validité de données (restriction de domaine)
+§ CHECK
+§ Intégrité référentielle
+§ REFERENCES
+Définition des contraintes
+28/04/2024
+18
+Le langage SQL
+INF322|| 2023-2024
+§ Exemple 1 :
+§ Exemple 2:
+Définition des contraintes : Exemples
+28/04/2024
+19
+Le langage SQL
+INF322|| 2023-2024
+§ Exemple 3 :
+Définition des contraintes : Exemples
+28/04/2024
+Contrainte de 
+domaine
+Définition de 
+clé étrangère 
+20
+Le langage SQL
+INF322|| 2023-2024
+Langage de Manipulation de données
+28/04/2024
+21
+Le langage SQL
+INF322|| 2023-2024
+qSyntaxe
+•
+Pour insérer un tuple complètement spécifié :
+INSERT INTO Table VALUES (val1 ,..., valn );
+•
+Pour insérer un tuple incomplètement spécifié :
+INSERT INTO Table(liste_attributs)  VALUES (val1 ,..., valn );
+•
+On peut insérer un tuple à partir d’une relation ayant le même schéma
+INSERT INTO Table
+SELECT * 
+FROM ….
+Ajout de tuples - INSERT
+28/04/2024
+22
+Le langage SQL
+INF322|| 2023-2024
+q Sur les relations 
+Etudiants (matricule, Nom, Prénom, Age, Ville)
+Enseignant (codeProf, Nom, Prénom) 
+q Ajouter l'étudiant Paul PAPA, 21 ans, habitant Douala, ayant pour 
+matricule 20U0215. 
+INSERT INTO Etudiants VALUES ('20U0215', ‘PAPA', 'Paul’, 21, ‘Douala’);
+q Ajouter tous les étudiants de Yaoundé dans la liste des enseignants
+INSERT INTO Enseignant 
+SELECT matricule, nom, prenom
+FROM Etudiant
+WHERE ville = ‘Yaoundé’;
+Ajout de tuples - Exemple
+28/04/2024
+23
+Le langage SQL
+INF322|| 2023-2024
+qSyntaxe
+UPDATE Table
+SET attribut1 = expr1, …. Attributn = exprn
+WHRE condition;
+•
+Les expressions peuvent être :
+ü Une constante 
+ü Une valeur NULL
+ü Une clause SELECT
+Modification de tuples - UPDATE
+28/04/2024
+24
+Le langage SQL
+INF322|| 2023-2024
+q Sur la relation 
+Etudiants (matricule, Nom, Prénom, Age, Ville)
+q Augmenter l'âge de Paul PAPA (matricule =  20U0215) d’un an. 
+UPDATE Etudiants 
+SET age = age + 1
+WHERE matricule=’20U0215’;
+q Tous les étudiants de Douala on déménagé à Garoua
+UPDATE Etudiants
+SET ville=‘Garoua’
+WHERE ville = ‘Douala’;
+28/04/2024
+Modification de tuples - Exemple
+25
+Le langage SQL
+INF322|| 2023-2024
+qSyntaxe
+DELETE FROM Table
+[ WHRE condition];
+q Exemple : retirer de la liste tous les étudiants de plus de 50 ans. 
+DELETE FROM Etudiants 
+WHERE age > 50;
+Suppression  de tuples - DELETE
+28/04/2024
+26
+Le langage SQL
+INF322|| 2023-2024
+qSyntaxe : forme générale
+SELECT [UNIQUE|DISTINCT ] liste_attributs |*  
+FROM Table ; 
+Équivalent AR : 
+Projection
+28/04/2024
+27
+Le langage SQL
+INF322|| 2023-2024
+q Soit la relation 
+Etudiants (matricule, Nom, Prénom, Age, Ville)
+q Afficher tous les étudiants 
+SELECT * FROM Etudiants;
+q Noms, prénoms et âges de tous les étudiants
+SELECT nom, prenom, age
+FROM Etudiants;
+28/04/2024
+Projection - Exemple
+28
+Le langage SQL
+INF322|| 2023-2024
+qSyntaxe : forme générale
+SELECT * FROM table WHERE condition;
+Équivalent AR : 
+q La condition peut être formée sur des noms d’attributs ou des constantes 
+avec : 
+§ des opérateurs de comparaison : =, <, >, <> (!=) , <=, >=
+§ des opérateurs logiques : AND, OR, NOT
+§ des opérateurs : IN, BETWEEN … AND, LIKE, EXISTS, IS, ALL, SOME, 
+ANY
+§ « _ » remplace un caractère et « % » remplace une chaîne de caractères
+Restriction
+28/04/2024
+29
+Le langage SQL
+INF322|| 2023-2024
+qSyntaxe : forme générale
+SELECT <liste de projection>
+FROM <liste de tables>
+[WHERE <critère de jointure> AND <critère de restriction> ] 
+[GROUP BY  <attributs de partitionnement>]
+[HAVING <critère de restriction> ] 
+[ORDER BY expression]
+[LIMIT count]
+q Restrictions 
+Les conditions peuvent faire appel aux éléments ci-après :
+§
+Opérateurs logiques : AND, OR, NOT
+§
+Comparateurs : IN, BETWEEN, LIKE (%, _)
+§
+Comparateurs arithmétiques : =, <, >, <>, <=, >=, etc.
+§
+Fonctions sur chaine :  LENGTH, CONCAT, SUBSTRING, etc.
+q Possibilité de blocs imbriqués par :  IN, EXISTS, NOT EXISTS, ALL, SOME, ANY
+Sélection de tuples - SELECT
+28/04/2024
+30
+Le langage SQL
+INF322|| 2023-2024
+SQL permet l’imbrication de sous-requêtes au niveau de la clause
+WHERE.
+qSyntaxe : forme générale
+SELECT <liste de projection>
+FROM <liste de tables>
+WHERE <critère de restriction contenant une requête imbriquée>
+q Restrictions 
+Les sous requêtes sont utilisées : 
+§
+dans des prédicats de comparaison : =, <, >, <>, <=, >=, etc.
+§
+dans des prédicats:  IN, EXISTS, NOT EXISTS, ALL, SOME, ANY
+Sélection : Sous Requêtes 
+28/04/2024
+31
+Le langage SQL
+INF322|| 2023-2024
+Application : TP SQL Avancé
+28/04/2024
+§
+Cas d’étude
+•
+On considère une base de données de gestion des stocks de vaccin
+contre le covid19 en France.
+§
+Schéma de la base de données
+§
+Nom de la BD : covid19
+32
+Le langage SQL
+INF322|| 2023-2024
+Application : TP SQL Avancé
+28/04/2024
+§
+Insertion, modification, suppression
+§
+Sélection / recherche
+•
+Requêtes simples
+1.
+Liste des départements et le nom de leur région
+2.
+Tous les départements de la Bretagne
+•
+Requêtes imbriquées
+3.
+Les départements de la même région que Paris
+•
+Prédicats du WHERE : LIKE, IN, BETWEEN, NOT, ANY, ALL
+4.
+Les départements d’une région autre que celle de Paris
+5.
+Départements d’une région dont le nom contient le mot «France»
+•
+Agrégation des résultats : COUNT, SUM, AVG, MAX, MIN
+6.
+Le nombre de livraisons de chaque type de vaccin
+7.
+Le nombre de lots livrés par type de vaccin
+8.
+Le vaccin qui a été le plus utilisé
+9.
+Le vaccin le moins utilisé
+33
+Le langage SQL
+INF322|| 2023-2024
+Ouvrages recommandés
+• G. Gardarin, Bases de Données-Objet et Relationnelle,Eyrolles. 2001
+• C.J. Date. Introduction aux Bases de Données. Vuibert Informatique. 
+2000
+• J. Akoka, I. Comyn-Wattiau. Conception des Bases de Données 
+Relationnelles en Pratique : Concepts, Méthodes et Cas Corrigés. 
+Vuibert Informatique. 2001
+Notes de cours et autres références
+• Thierry Lecroq, Base de données, Université de Rouen.
+• Elsa NEGRE, Bases de données relationnelles – SQL, Lamsade, Paris 
+Dauphine
+Bibliographie et ressources
+28/04/2024
