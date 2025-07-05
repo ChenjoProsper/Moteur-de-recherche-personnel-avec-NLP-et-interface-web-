@@ -1,94 +1,61 @@
 import re
-import os
 
-# --- Fonction de nettoyage du texte (inchangée) ---
+# Charger le modèle de langue française de SpaCy
+# 'disable' permet de désactiver les composants du pipeline dont vous n'avez pas besoin
+# pour accélérer le traitement si vous ne faites que de la lemmatisation.
+# Pour la NER, vous auriez besoin de 'ner', 'textcat', etc.
+
+
 def nettoyer_texte(texte):
-    """
-    Nettoie une chaîne de texte en supprimant les éléments indésirables,
-    tout en conservant l'apostrophe (').
-    """
-    # Supprimer les balises HTML (ex: <p>, <div>, <a>)
     texte = re.sub(r'<[^>]+>', '', texte)
-
-    # Remplacer les entités HTML (ex: &amp;, &lt;, &#x27;) par leur équivalent
     texte = texte.replace('&amp;', '&')
     texte = texte.replace('&lt;', '<')
     texte = texte.replace('&gt;', '>')
     texte = texte.replace('&quot;', '"')
-    texte = texte.replace('&#x27;', "'") # Assure que l'entité apostrophe est bien convertie
+    texte = texte.replace('&#x27;', "'") 
     texte = texte.replace('&#x2F;', '/')
-    # ... ajoutez d'autres entités si nécessaire
-
-    # Garde les caractères accentués français, la ponctuation courante ET L'APOSTROPHE
     texte = re.sub(r'[^a-zA-Z0-9\s.,!?-ÀàÂâÄäÈèÉéÊêËëÎîÏïÔôŒœÙùÛûÜüŸÿÇç\']', '', texte)
-
-    # Supprimer les multiples espaces, tabulations, retours à la ligne
     texte = re.sub(r'\s+', ' ', texte) 
-    
-    # Supprimer les numéros de page ou en-têtes/pieds de page répétitifs (générique)
     texte = re.sub(r'^\s*\d+\s*$', '', texte, flags=re.MULTILINE) 
-    texte = re.sub(r'\b\d{1,4}\b', '', texte) # 1 à 4 chiffres isolés
+    texte = re.sub(r'\b\d{1,4}\b', '', texte)
     
-    # Supprimer les lignes vides excessives
+    # Pas de lemmatisation ici car elle sera appliquée pendant l'extraction des entités et pour le contenu principal.
+    # On veut que le NER s'exécute sur un texte propre mais pas encore lemmatisé globalement.
+    
     texte = re.sub(r'\n\s*\n', '\n', texte)
-    
-    # Supprimer les espaces en début et fin de chaque ligne
     texte = "\n".join([line.strip() for line in texte.split('\n')])
-
-    # Supprimer les espaces en début et fin de la chaîne finale
     texte = texte.strip()
-
     return texte
+
 # --- Nouvelle fonction pour nettoyer les fichiers existants ---
 def nettoyer_fichiers_extraits(input_directory="data/extraits", output_directory="data/nettoyes"):
-    """
-    Lit tous les fichiers .txt d'un dossier d'entrée, les nettoie
-    et sauvegarde les versions nettoyées dans un dossier de sortie.
-    """
     print(f"Début du nettoyage des fichiers dans : {input_directory}\n")
-    
     if not os.path.exists(input_directory):
-        print(f"Erreur : Le dossier d'entrée '{input_directory}' n'existe pas. Veuillez d'abord extraire les fichiers.")
+        print(f"Erreur : Le dossier d'entrée '{input_directory}' n'existe pas.")
         return
-
-    # Crée le dossier de sortie pour les fichiers nettoyés s'il n'existe pas
     os.makedirs(output_directory, exist_ok=True)
-    
     files_found = False
     for filename in os.listdir(input_directory):
         if filename.lower().endswith(".txt"):
             files_found = True
             input_file_path = os.path.join(input_directory, filename)
-            output_file_path = os.path.join(output_directory, filename) # Le nom de fichier reste le même
-
+            output_file_path = os.path.join(output_directory, filename)
             try:
-                # 1. Lire le contenu du fichier extrait
                 with open(input_file_path, "r", encoding="utf-8") as f:
                     texte_brut = f.read()
-                
                 print(f"Nettoyage de : {filename}")
-                
-                # 2. Nettoyer le texte
-                texte_nettoye = nettoyer_texte(texte_brut)
-                
-                # 3. Enregistrer la version nettoyée
+                texte_nettoye = nettoyer_texte(texte_brut) # On nettoie mais on ne lemmatise pas encore tout le texte ici
                 with open(output_file_path, "w", encoding="utf-8") as f:
                     f.write(texte_nettoye)
-                
                 print(f"Version nettoyée sauvegardée dans : {output_file_path}")
-                print("-" * 50)
-
             except Exception as e:
                 print(f"Erreur lors du nettoyage du fichier '{filename}' : {e}")
-                print("-" * 50)
-    
     if not files_found:
         print(f"Aucun fichier .txt trouvé dans le dossier '{input_directory}'.")
     else:
         print("\nNettoyage de tous les fichiers extraits terminé.")
 
-
-from pdf_extractor import *
+from .pdf_extractor import *
 
 # --- Exemple d'utilisation du processus en deux étapes ---
 if __name__ == "__main__":
@@ -114,3 +81,4 @@ if __name__ == "__main__":
     print("\nProcessus terminé : Les fichiers PDF ont été extraits et leurs versions nettoyées sont disponibles.")
     print(f"Fichiers bruts : {extracted_dir}")
     print(f"Fichiers nettoyés : {cleaned_dir}")
+
